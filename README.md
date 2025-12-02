@@ -41,5 +41,5 @@ The underlying engine implementation is **closed-source**.
 
 If this repository is published via **GitHub Pages**, the rendered site will be available at:
 
-https://locar77i.github.io/flashstrike-docs/
+https://locar77i.github.io/FlashStrike-docs/
 
