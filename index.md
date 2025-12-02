@@ -13,13 +13,13 @@ Welcome to the official documentation for **FlashStrike**, an ultra-low-latency,
 The following sections describe each internal component of the engine:
 
 - [Matching Engine Overview](docs/architecture/matching_engine_overview.md)
-- [Order Book](docs/architecture/order_book.md)
-- [Order Pool](docs/architecture/order_pool.md)
-- [Order ID Map](docs/architecture/order_id_map.md)
-- [Partition System](docs/architecture/partitions.md)
-- [Price Level Store](docs/architecture/price_level_store.md)
-- [Manager](docs/architecture/manager.md)
-- [Telemetry System](docs/architecture/telemetry.md)
+- [Manager](docs/architecture/matching_engine/manager.md)
+- [Order Book](docs/architecture/matching_engine/order_book.md)
+- [Price Level Store](docs/architecture/matching_engine/price_level_store.md)
+- [Partition System](docs/architecture/matching_engine/partitions.md)
+- [Order Pool](docs/architecture/matching_engine/order_pool.md)
+- [Order ID Map](docs/architecture/matching_engine/order_id_map.md)
+- [Telemetry System](docs/architecture/matching_engine/telemetry.md)
 
 ---
 
