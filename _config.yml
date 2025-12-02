@@ -1,18 +1,23 @@
-title: "FlashStrike Documentation"
-description: "High-performance Matching Engine Architecture"
-theme: jekyll-theme-cayman
+title: FlashStrike Documentation
+description: High-performance Matching Engine Architecture
+theme: just-the-docs
 
+# Build settings
 markdown: kramdown
-highlighter: rouge
 
-exclude:
-  - index_backup.html
-  - README.md
+# Where pages live
+collections:
+  docs:
+    permalink: "/:path/"
+    output: true
 
-# Ensures GitHub Pages processes Markdown and directories
-defaults:
-  - scope:
-      path: ""
-    values:
-      layout: default
+just_the_docs:
+  # Enable navigation on the left
+  collections:
+    docs:
+      name: Documentation
+      nav_exclude: false
+
+# Optional: Search
+search_enabled: true
 
