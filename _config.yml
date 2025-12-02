@@ -2,7 +2,7 @@ title: FlashStrike Documentation
 description: High-performance Matching Engine Architecture
 
 # Use Just the Docs via GitHub Pages
-remote_theme: pages-themes/modernist@v0.2.0
+remote_theme: pages-themes/cayman@v0.2.0
 
 # Optional: Configure Markdown & navigation
 markdown: kramdown
