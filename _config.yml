@@ -1,3 +1,5 @@
-theme: just-the-docs
-title: "FlashStrike Documentation"
+theme: jekyll-theme-cayman
+markdown: kramdown
+title: FlashStrike Docs
+description: Architecture documentation for the FlashStrike matching engine
 
