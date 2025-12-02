@@ -1,23 +1,22 @@
 title: FlashStrike Documentation
 description: High-performance Matching Engine Architecture
-theme: just-the-docs
 
-# Build settings
+# Use Just the Docs via GitHub Pages
+remote_theme: just-the-docs/just-the-docs
+
+# Optional: Configure Markdown & navigation
 markdown: kramdown
 
-# Where pages live
+search_enabled: true
+
+# Collections (your docs folder)
 collections:
   docs:
-    permalink: "/:path/"
     output: true
+    permalink: "/:collection/:path/"
 
 just_the_docs:
-  # Enable navigation on the left
   collections:
     docs:
       name: Documentation
-      nav_exclude: false
-
-# Optional: Search
-search_enabled: true
 
