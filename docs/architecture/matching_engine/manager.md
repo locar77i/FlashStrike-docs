@@ -3,7 +3,14 @@ High‑Level Component Architecture
 
 ## 1. Purpose
 
-The **Manager** is the top-level orchestrator of the FlashStrike matching engine.  
+The **Manager** is the top-level orchestrator of the FlashStrike matching engine and responsible for:
+
+- processing the market configuration ([see instrument.md](./conf/instrument.md))
+- computing integer-scaled instrument parameters ([see normalized_instrument.md](./conf/normalized_instrument.md))
+- generating the partitioning plan ([see partition_plan.md](./conf/partition_plan.md))
+- initializing the order book and telemetry components
+- preparing the system for processing orders at nanosecond precision
+
 It is the *entry point* for all order operations and coordinates the behavior of the entire subsystem stack:
 
 - Order validation  

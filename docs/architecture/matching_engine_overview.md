@@ -48,7 +48,7 @@ The engine is built from the following layered subsystems:
 ---
 
 ## 3. The Manager  
-**The Matching Engine Manager** is the top-level orchestration component. [[Manager page]](./matching_engine/manager.md)
+**The Matching Engine Manager** is the top-level orchestration component ([see manager.md](./matching_engine/manager.md)).
 
 Responsibilities:
 - Validates incoming orders  
@@ -67,7 +67,7 @@ Key properties:
 ---
 
 ## 4. OrderBook  
-The `OrderBook` owns and coordinates all memory and routing structures. [[OrderBook page]](./matching_engine/order_book.md)
+The `OrderBook` owns and coordinates all memory and routing structures ([see order_book.md](./matching_engine/order_book.md)).
 
 Responsibilities:
 - Allocates orders (OrderPool)
@@ -81,7 +81,7 @@ Key strength:
 ---
 
 ## 5. PriceLevelStore  
-The **PriceLevelStore** is the heart of the price-time priority model. [[PriceLevelStore page]](./matching_engine/price_level_store.md)
+The **PriceLevelStore** is the heart of the price-time priority model ([see price_level_store.md](./matching_engine/price_level_store.md)).
 
 It provides:
 - O(1) access to the **best price**
@@ -108,7 +108,7 @@ in **O(1)**.
 ---
 
 ## 6. Partition & PartitionPool  
-A **Partition** holds a fixed-size array of consecutive price levels. [[Partitions page]](./matching_engine/partitions.md)
+A **Partition** holds a fixed-size array of consecutive price levels ([see partitions.md](./matching_engine/partitions.md)).
 
 PartitionPool:
 - Preallocates N partitions  
@@ -128,7 +128,7 @@ This design drastically reduces:
 ---
 
 ## 7. OrderPool  
-The **OrderPool** is a fixed-size intrusive memory pool: [[OrderPool page]](./matching_engine/order_pool.md)
+The **OrderPool** is a fixed-size intrusive memory pool ([see order_pool.md](./matching_engine/order_pool.md)):
 
 - Holds every active order  
 - O(1) allocate and release  
@@ -155,7 +155,7 @@ This allows:
 ---
 
 ## 8. OrderIdMap  
-A **fixed-size, power-of-two**, linear-probing hash map mapping: [[OrderIDMap page]](./matching_engine/order_id_map.md)
+A **fixed-size, power-of-two**, linear-probing hash map mapping ([see order_id_map.md](./matching_engine/order_id_map.md)):
 ```
 order_id → internal order index
 ```
@@ -193,7 +193,7 @@ Used for downstream:
 ---
 
 ## 10. Telemetry  
-FlashStrike integrates **granular telemetrics**:  [[Telemetry page]](./matching_engine/telemetry.md)
+FlashStrike integrates **granular telemetrics** ([see telemetry.md](./matching_engine/telemetry.md)):
 
 - initialization metrics  
 - low-level memory metrics  
@@ -204,9 +204,54 @@ FlashStrike integrates **granular telemetrics**:  [[Telemetry page]](./matching_
 
 This is critical for profiling and validating deterministic performance.
 
+### 10.1 Snapshotter: Read-Stable Telemetry Replication
+
+Telemetry is extremely hot and continuously updated by the matching engine’s main processing thread.
+If multiple external consumers tried to read it directly—dashboards, CLI tools, exporters—this could disturb cache locality and introduce latency spikes.
+
+To avoid interference, FlashStrike provides a generic utility ([see snapshotter.md](./metrics/runtime/snapshotter.md)):
+```
+runtime::snapshotter<T> — Low-Overhead Metric Replication
+```
+
+The snapshotter creates a stable, atomic, read-only view of all telemetry metrics at a configurable interval (default: 1 second).
+It works by maintaining two cache-aligned buffers and performing periodic A/B swaps.
+
+#### Why it matters
+- External readers must not touch the hot telemetry cache lines.
+- Some dashboards may poll metrics hundreds of times per second.
+- Exporters (Prometheus, Grafana agents, internal monitors) benefit from coherent snapshots.
+
+#### With the snapshotter:
+- Only one thread copies the metrics (the snapshot worker).
+- All readers observe a consistent, interference-free snapshot.
+- The matching engine’s hot path remains untouched.
+
+#### Benefits
+- Zero contention with hot path.
+- Coherent multi-field snapshots (atomic visibility).
+- Supports multiple concurrent readers safely.
+- Extremely low overhead (copy is cache-local, predictable).
+
 ---
 
-## 11. Deterministic Performance Model
+## 11. Timing & Timestamp Semantics
+
+Accurate, monotonic, and high-resolution timestamps are foundational to the FlashStrike matching engine.
+They drive sequencing, ordering, latency measurement, event tracing, and cross-component coordination.
+
+FlashStrike uses its own timing subsystem built around the CPU’s Time Stamp Counter (TSC), rather than relying on high-latency OS clocks, to provide:
+
+- monotonic, nanosecond timestamps,
+- deterministic sequencing,
+- precise latency measurement,
+- stable numeric timing behavior across cores and over time..
+
+The implementation is provided in the ```monotonic_clock``` module ([see monotonic_clock.md](./system/monotonic_clock.md)), which provides the foundation for all time-dependent logic in the engine..
+
+---
+
+## 12. Deterministic Performance Model
 
 ### No dynamic memory
 All hot-path structures are preallocated:
@@ -236,7 +281,7 @@ best bid/ask | O(1)
 
 ---
 
-## 12. Summary
+## 13. Summary
 
 The FlashStrike matching engine architecture exhibits:
 
