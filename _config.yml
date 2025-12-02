@@ -1,5 +1,18 @@
+title: "FlashStrike Documentation"
+description: "High-performance Matching Engine Architecture"
 theme: jekyll-theme-cayman
+
 markdown: kramdown
-title: FlashStrike Docs
-description: Architecture documentation for the FlashStrike matching engine
+highlighter: rouge
+
+exclude:
+  - index_backup.html
+  - README.md
+
+# Ensures GitHub Pages processes Markdown and directories
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
 
