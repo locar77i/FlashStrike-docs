@@ -317,3 +317,7 @@ FlashStrike’s matching engine is composed of several focused, deterministic, h
 | [OrderIDMap](./matching_engine/order_id_map.md) | Power-of-two linear-probing hash map for O(1) id lookup. |
 | [PriceLevelStore](./matching_engine/price_level_store.md) | Partitioned price-time priority engine with best-price tracking. |
 | [Partitions](./matching_engine/partitions.md) | Partition + PartitionPool architecture for scalable price ranges. |
+
+---
+
+👉 Back to [`FlashStrike — High-Performance Matching Engine Documentation`](../../index.md)

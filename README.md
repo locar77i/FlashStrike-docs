@@ -1,7 +1,6 @@
 # FlashStrike Matching Engine — Public Architecture Documentation
 
-This repository contains the **public-facing architecture documentation** for the
-FlashStrike ultra-low-latency matching engine.
+Welcome! This repository contains the official **public-facing architecture documentation** for **FlashStrike**, an ultra-low-latency & memory-deterministic matching engine designed for HFT and crypto exchanges.
 
 ⚠️ **Note:**  
 This repository contains **documentation only**.  
@@ -11,16 +10,27 @@ The production source code remains private.
 
 ## 📚 Documentation Index
 
-- [Matching Engine Overview](docs/architecture/matching_engine_overview.md)
+### [FlashStrike Matching Engine — Top-Level Architecture Overview](docs/architecture/matching_engine_overview.md)
 
 ### Core Components
-- [Manager](docs/architecture/matching_engine/manager.md)
-- [OrderBook](docs/architecture/matching_engine/order_book.md)
-- [OrderPool](docs/architecture/matching_engine/order_pool.md)
-- [OrderIdMap](docs/architecture/matching_engine/order_id_map.md)
-- [PriceLevelStore](docs/architecture/matching_engine/price_level_store.md)
-- [Partitions & PartitionPool](docs/architecture/matching_engine/partitions.md)
-- [Telemetry System](docs/architecture/matching_engine/telemetry.md)
+
+| Document | Description |
+|----------|---------|
+| [Manager](docs/architecture/matching_engine/manager.md) | Top-level orchestrator of the FlashStrike matching engine. |
+| [OrderBook](docs/architecture/matching_engine/order_book.md) | Preallocated data structure that stores all resting orders |
+| [OrderPool](docs/architecture/matching_engine/order_pool.md) | High-performance, preallocated memory subsystem for orders |
+| [OrderIdMap](docs/architecture/matching_engine/order_id_map.md) | High‑performance, fixed‑size, open‑addressing hash map |
+| [PriceLevelStore](docs/architecture/matching_engine/price_level_store.md) | Organizes all price levels using a partitioned, bitmap‑indexed layout |
+| [Partitions & PartitionPool](docs/architecture/matching_engine/partitions.md) | They provide a deterministic memory layout with constant-time price-to-level mapping |
+| [Telemetry System](docs/architecture/matching_engine/telemetry.md) | HFT‑grade ultra‑low‑overhead metrics |
+
+### FlashStrike WAL System
+
+| Document | Description |
+|----------|---------|
+| [WAL Storage Architecture — Overview](docs/architecture/wal/segment_overview.md) | Provides a high-level overview of the WAL storage model. |
+| [WAL Recorder System — Architectural Overview](docs/architecture/wal/recorder_overview.md) | FlashStrike Write‑Ahead Log (WAL) Recorder System |
+| [WAL Recovery System — Architectural Overview](docs/architecture/wal/recorder_overview.md) | FlashStrike Write‑Ahead Log (WAL) Recovery System |
 
 ---
 
@@ -66,3 +76,10 @@ If this repository is published via **GitHub Pages**, the rendered site will be 
 
 https://locar77i.github.io/FlashStrike-docs/
 
+---
+
+Happy reading!  
+— *R. Lopez Caballero*
+
+
+---
