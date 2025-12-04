@@ -12,7 +12,10 @@ Welcome to the official documentation for **FlashStrike**, an ultra-low-latency,
 
 The following sections describe each internal component of the engine:
 
-- [Matching Engine Overview](docs/architecture/matching_engine_overview.md)
+[Matching Engine Overview](docs/architecture/matching_engine_overview.md)
+
+### Core Components
+
 - [Manager](docs/architecture/matching_engine/manager.md)
 - [Order Book](docs/architecture/matching_engine/order_book.md)
 - [Price Level Store](docs/architecture/matching_engine/price_level_store.md)
@@ -46,10 +49,13 @@ FlashStrike implements:
 
 ---
 
-## **⚙️ Benchmarks**
+## ⚡ Benchmark & Performance Report
 
-- [MatchingEngine{BTC/USD}](docs/benchmarks/benchmark_report.md)
+FlashStrike includes a public benchmark report demonstrating the engine’s
+ultra-low-latency behavior under exchange-scale workloads.
 
+👉 Read the full report:
+[High-Performance Benchmark Report](docs/benchmarks/benchmark_report.md)
 
 ---
 
