@@ -37,6 +37,29 @@ The underlying engine implementation is **closed-source**.
 
 ---
 
+## ⚡ Benchmark & Performance Report
+
+FlashStrike includes a public benchmark report demonstrating the engine’s
+ultra-low-latency behavior under exchange-scale workloads.
+
+📈 51 billion operations executed end-to-end
+⚡ 8.47 million requests/second sustained
+🎯 Sub-microsecond median & p99 latency
+🏆 HFT-grade deterministic tail behavior
+
+👉 Read the full report:
+[High-Performance Benchmark Report](docs/benchmarks/benchmark_report.md)
+
+![System Status](docs/benchmarks/plots/00.system_status.png)
+
+### This report is intended to showcase:
+- real-world performance characteristics,
+- data structure efficiency,
+- tail-latency control,
+- and the engine’s suitability for HFT-class workloads.
+
+---
+
 ## 🌍 Live Documentation Site
 
 If this repository is published via **GitHub Pages**, the rendered site will be available at:

@@ -1,7 +1,7 @@
 # Snapshotter
 
 ## Summary
-`flashstrike::metrics::runtime::snapshotter<T>` is a lightweight, double-buffered snapshot utility that produces **stable, coherent, read-only replicas** of a live metrics structure at a configurable cadence.  
+`lcr::metrics::runtime::snapshotter<T>` is a lightweight, double-buffered snapshot utility that produces **stable, coherent, read-only replicas** of a live metrics structure at a configurable cadence.  
 It is specifically designed for HFT systems where the writer(s) update metrics in hot paths and multiple readers (dashboards, exporters, CLI tools) must access metrics without causing cache-line contention or inconsistent multi-field reads.
 
 ---
@@ -90,7 +90,7 @@ Key requirement for `MetricsType`:
 ```cpp
 // Suppose Telemetry is the top-level metrics struct
 Telemetry live_metrics;
-flashstrike::metrics::runtime::snapshotter<Telemetry> snap(live_metrics, std::chrono::milliseconds(500),
+lcr::metrics::runtime::snapshotter<Telemetry> snap(live_metrics, std::chrono::milliseconds(500),
     [](const auto& info){
         // optional: push to exporter or notify
         // e.g., logger->info("snapshot version {} ts {}", info.version, info.timestamp_ns);

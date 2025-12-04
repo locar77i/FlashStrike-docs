@@ -209,9 +209,9 @@ This is critical for profiling and validating deterministic performance.
 Telemetry is extremely hot and continuously updated by the matching engine’s main processing thread.
 If multiple external consumers tried to read it directly—dashboards, CLI tools, exporters—this could disturb cache locality and introduce latency spikes.
 
-To avoid interference, FlashStrike provides a generic utility ([see snapshotter.md](./metrics/runtime/snapshotter.md)):
+To avoid interference, FlashStrike provides a generic utility ([see snapshotter.md](../lcr/metrics/runtime/snapshotter.md)):
 ```
-runtime::snapshotter<T> — Low-Overhead Metric Replication
+lcr::metrics::runtime::snapshotter<T> — Low-Overhead Metric Replication
 ```
 
 The snapshotter creates a stable, atomic, read-only view of all telemetry metrics at a configurable interval (default: 1 second).
@@ -247,7 +247,7 @@ FlashStrike uses its own timing subsystem built around the CPU’s Time Stamp Co
 - precise latency measurement,
 - stable numeric timing behavior across cores and over time..
 
-The implementation is provided in the ```monotonic_clock``` module ([see monotonic_clock.md](./system/monotonic_clock.md)), which provides the foundation for all time-dependent logic in the engine..
+The implementation is provided in the ```monotonic_clock``` module ([see monotonic_clock.md](../lcr/system/monotonic_clock.md)), which provides the foundation for all time-dependent logic in the engine..
 
 ---
 
