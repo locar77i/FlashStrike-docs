@@ -165,3 +165,21 @@ It works hand‑in‑hand with:
 
 All three form the full representation of a tradable market inside Flashstrike.
 
+---
+ 
+## Related components
+
+[`matching_engine::Manager`](../manager.md)
+[`matching_engine::OrderBook`](../order_book.md)
+[`matching_engine::OrderIdMap`](../order_id_map.md)
+[`matching_engine::OrderPool`](../order_pool.md)
+[`matching_engine::PartitionPool`](../partitions.md)
+[`matching_engine::PriceLevelStore`](../price_level_store.md)
+[`matching_engine::Telemetry`](../telemetry.md)
+
+[`matching_engine::conf::Instrument`](./instrument.md)
+[`matching_engine::conf::NormalizedInstrument`](./normalized_instrument.md)
+
+---
+
+👉 Back to [`Manager - Matching Engine Orchestrator`](../manager.md)

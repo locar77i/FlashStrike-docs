@@ -1,6 +1,6 @@
 # OrderIdMap — Architecture Overview
 
-## 1. Purpose
+## Purpose
 `OrderIdMap` provides a **high‑performance, fixed‑size, open‑addressing hash map** used to resolve:
 ```
 OrderId → OrderPool index
@@ -15,7 +15,7 @@ It is a mandatory subsystem for exchange‑grade matching engines, where externa
 
 ---
 
-## 2. High‑Level Design
+## High‑Level Design
 
 `OrderIdMap` is a **preallocated, power‑of‑two hash table** with:
 - no dynamic resize
@@ -31,7 +31,7 @@ This design yields:
 
 ---
 
-## 3. Memory Layout
+## Memory Layout
 
 Each entry in the table consists of:
 
@@ -50,7 +50,7 @@ The table is a contiguous vector `<Entry>`.
 
 ---
 
-## 4. Capacity & Load Factor
+## Capacity & Load Factor
 
 Initialization:
 - User requests `capacity`
@@ -66,7 +66,7 @@ is extremely fast.
 
 ---
 
-## 5. Hash Function
+## Hash Function
 
 A Knuth multiplicative hash scrambles sequentially increasing order IDs:
 
@@ -78,7 +78,7 @@ This reduces clustering for workloads where order IDs are monotonic (typical in 
 
 ---
 
-## 6. Probing Strategy: Linear Probing
+## Probing Strategy: Linear Probing
 
 For insert/find/remove:
 
@@ -93,7 +93,7 @@ Advantages:
 
 ---
 
-## 7. Insertion
+## Insertion
 
 Insertion succeeds if:
 - slot is EMPTY, or
@@ -108,7 +108,7 @@ Worst‑case probe chain:
 
 ---
 
-## 8. Deletion (Tombstoning)
+## Deletion (Tombstoning)
 
 Removing a key:
 - marks entry with `TOMBSTONE_KEY`
@@ -119,7 +119,7 @@ This preserves correctness of future lookups.
 
 ---
 
-## 9. Lookup
+## Lookup
 
 Lookup stops when:
 ```
@@ -132,7 +132,7 @@ Otherwise:
 
 ---
 
-## 10. Performance Characteristics
+## 1Performance Characteristics
 
 ### Time Complexity
 Operation | Complexity | Notes
@@ -150,7 +150,7 @@ Critical for real‑time engines:
 
 ---
 
-## 11. Telemetry & Instrumentation
+## Telemetry & Instrumentation
 
 Integrated metric hooks:
 - probe length
@@ -165,7 +165,7 @@ These allow:
 
 ---
 
-## 12. Why This Matters
+## Why This Matters
 
 The design mirrors hash maps found in:
 - high‑frequency trading engines  
@@ -181,7 +181,7 @@ It is:
 
 ---
 
-## 13. Summary
+## Summary
 
 `OrderIdMap` provides:
 
@@ -195,3 +195,21 @@ It is:
 
 This makes it a foundational piece of the FlashStrike matching engine memory subsystem.
 
+---
+ 
+## Related components
+
+[`matching_engine::Manager`](./manager.md)
+[`matching_engine::OrderBook`](./order_book.md)
+[`matching_engine::OrderPool`](./order_pool.md)
+[`matching_engine::PartitionPool`](./partitions.md)
+[`matching_engine::PriceLevelStore`](./price_level_store.md)
+[`matching_engine::Telemetry`](./telemetry.md)
+
+[`matching_engine::conf::Instrument`](./conf/instrument.md)
+[`matching_engine::conf::NormalizedInstrument`](./conf/normalized_instrument.md)
+[`matching_engine::conf::PartitionPlan`](./conf/partition_plan.md)
+
+---
+
+👉 Back to [`FlashStrike Matching Engine — Overview`](../matching_engine_overview.md)

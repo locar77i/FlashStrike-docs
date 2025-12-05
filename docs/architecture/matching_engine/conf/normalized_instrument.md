@@ -169,3 +169,21 @@ These assertions guarantee the struct is safe for:
 `NormalizedInstrument` provides the **engine‑ready, integer‑scaled**, cache‑aligned representation of a market.  
 It is the foundation for any deterministic, high‑performance, floating‑point‑free matching engine logic.
 
+---
+ 
+## Related components
+
+[`matching_engine::Manager`](../manager.md)
+[`matching_engine::OrderBook`](../order_book.md)
+[`matching_engine::OrderIdMap`](../order_id_map.md)
+[`matching_engine::OrderPool`](../order_pool.md)
+[`matching_engine::PartitionPool`](../partitions.md)
+[`matching_engine::PriceLevelStore`](../price_level_store.md)
+[`matching_engine::Telemetry`](../telemetry.md)
+
+[`matching_engine::conf::Instrument`](./instrument.md)
+[`matching_engine::conf::PartitionPlan`](./partition_plan.md)
+
+---
+
+👉 Back to [`Manager - Matching Engine Orchestrator`](../manager.md)

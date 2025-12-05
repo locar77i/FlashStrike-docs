@@ -1,7 +1,7 @@
 # Manager — FlashStrike Matching Engine Orchestrator  
 High‑Level Component Architecture
 
-## 1. Purpose
+## Purpose
 
 The **Manager** is the top-level orchestrator of the FlashStrike matching engine and responsible for:
 
@@ -26,7 +26,7 @@ It exposes a stable, deterministic interface suitable for HFT workloads and exch
 
 ---
 
-## 2. Architectural Role
+## Architectural Role
 
 The Manager sits at the top of the pipeline:
 
@@ -61,9 +61,9 @@ Manager does **not** maintain market structure internally—it delegates statefu
 
 ---
 
-## 3. Core Responsibilities
+## Core Responsibilities
 
-### 3.1 Order Validation  
+### 1. Order Validation  
 The Manager ensures that incoming orders satisfy instrument constraints:
 
 - price range  
@@ -75,7 +75,7 @@ Invalid orders are rejected immediately.
 
 ---
 
-### 3.2 New Order Handling
+### 2. New Order Handling
 
 For an incoming order (`BID` or `ASK`), Manager performs:
 
@@ -90,7 +90,7 @@ Templates ensure **zero runtime branching** between BID/ASK paths.
 
 ---
 
-### 3.3 Matching Algorithm
+### 3. Matching Algorithm
 
 Matching follows strict price‑time priority:
 
@@ -110,7 +110,7 @@ All operations are **O(1)** per matched order thanks to:
 
 ---
 
-### 3.4 Modify Orders  
+### 4. Modify Orders  
 Supports:
 
 - **modify price**  
@@ -122,7 +122,7 @@ Quantity modifications update the PriceLevelStore and maintain total quantity.
 
 ---
 
-### 3.5 Cancel Orders  
+### 5. Cancel Orders  
 A simple fast call:
 
 ```
@@ -137,7 +137,7 @@ which performs:
 
 ---
 
-### 3.6 Emit Trade Events
+### 6. Emit Trade Events
 
 Trade events are published into a **lock‑free SPSC ring**:
 
@@ -155,7 +155,7 @@ Busy‑spin + yield behavior handles buffer pressure smoothly.
 
 ---
 
-### 3.7 Metrics & Telemetry
+### 7. Metrics & Telemetry
 
 Manager integrates with the telemetry layer:
 
@@ -170,9 +170,9 @@ This enables real‑time health monitoring and performance profiling.
 
 ---
 
-## 4. Detailed Internal Workflow
+## Detailed Internal Workflow
 
-### 4.1 `process_order()`
+### 1. `process_order()`
 
 Pseudo‑sequence:
 
@@ -190,7 +190,7 @@ The templated version avoids side‑based branching.
 
 ---
 
-### 4.2 `match_order_<SIDE>()`
+### 2. `match_order_<SIDE>()`
 
 Algorithm steps:
 
@@ -213,7 +213,7 @@ Highly optimized to avoid:
 
 ---
 
-### 4.3 `modify_order_price()`  
+### 3. `modify_order_price()`  
 
 Steps:
 
@@ -224,13 +224,13 @@ Steps:
 
 ---
 
-### 4.4 `cancel_order()`  
+### 4. `cancel_order()`  
 
 Direct call into the pools → O(1).
 
 ---
 
-## 5. Memory Model
+## Memory Model
 
 Manager owns:
 
@@ -245,7 +245,7 @@ All memory is preallocated at startup.
 
 ---
 
-## 6. Determinism & Performance
+## Determinism & Performance
 
 Manager design ensures:
 
@@ -266,7 +266,7 @@ This is the same architecture strategy used in:
 
 ---
 
-## 7. Summary
+## Summary
 
 The FlashStrike Manager is:
 
@@ -284,3 +284,21 @@ The FlashStrike Manager is:
 
 Its architecture is engineered for **exchange‑grade throughput**, capable of millions of operations per second with predictable latency.
 
+---
+ 
+## Related components
+
+[`matching_engine::OrderBook`](./order_book.md)
+[`matching_engine::OrderIdMap`](./order_id_map.md)
+[`matching_engine::OrderPool`](./order_pool.md)
+[`matching_engine::PartitionPool`](./partitions.md)
+[`matching_engine::PriceLevelStore`](./price_level_store.md)
+[`matching_engine::Telemetry`](./telemetry.md)
+
+[`matching_engine::conf::Instrument`](./conf/instrument.md)
+[`matching_engine::conf::NormalizedInstrument`](./conf/normalized_instrument.md)
+[`matching_engine::conf::PartitionPlan`](./conf/partition_plan.md)
+
+---
+
+👉 Back to [`FlashStrike Matching Engine — Overview`](../matching_engine_overview.md)

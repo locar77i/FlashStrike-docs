@@ -1,6 +1,6 @@
 # FlashStrike OrderBook — Architecture Overview
 
-## 1. Purpose
+## Purpose
 The FlashStrike `OrderBook` is a **preallocated, deterministic, O(1)** data structure that stores all resting orders and enables extremely fast insert, modify, cancel, and match operations.  
 It is designed for **ultra-low-latency matching**, strict price–time priority, and predictable tail behavior.
 
@@ -8,7 +8,7 @@ This document summarizes the architecture and key design choices of the OrderBoo
 
 ---
 
-## 2. High-Level Design
+## High-Level Design
 
 The OrderBook is built on top of three core, fixed-size memory structures:
 
@@ -35,7 +35,7 @@ This two-sided split avoids unpredictable branching and guarantees cache-friendl
 
 ---
 
-## 3. Memory Architecture
+## Memory Architecture
 
 ### ✔ Fully Preallocated
 All OrderBook memory is allocated at startup:
@@ -66,9 +66,9 @@ The PartitionPlan is computed once per instrument and enforces:
 
 ---
 
-## 4. Core Operations
+## Core Operations
 
-### 4.1 Insert (O(1))
+### 1. Insert (O(1))
 ```
 order_idx = order_pool.allocate()
 order_idmap.insert(orderid → index)
@@ -77,7 +77,7 @@ price_level_store.insert_order(index, order)
 
 No branching beyond SIDE selection, no dynamic allocation.
 
-### 4.2 Reprice (O(1))
+### 2. Reprice (O(1))
 - Retrieve order index from ID map  
 - Move order between price levels  
 - Adjust level aggregates  
@@ -85,12 +85,12 @@ No branching beyond SIDE selection, no dynamic allocation.
 
 Repricing is strictly side-specific to avoid unpredictable branches.
 
-### 4.3 Resize (O(1))
+### 3. Resize (O(1))
 - Directly update quantity  
 - Update level totals  
 - No movement between levels  
 
-### 4.4 Remove (O(1))
+### 4. Remove (O(1))
 ```
 price_level_store.remove_order(index)
 order_idmap.remove(orderid)
@@ -101,7 +101,7 @@ Complete teardown in constant time, fully inlined.
 
 ---
 
-## 5. PriceLevelStore Internals
+## PriceLevelStore Internals
 
 Each `PriceLevelStore` maintains:
 
@@ -122,7 +122,7 @@ This is the same design applied by modern high-performance exchange engines.
 
 ---
 
-## 6. Engine Properties
+## Engine Properties
 
 ### ✔ Deterministic
 No locks, no heap allocation, no syscalls.  
@@ -151,7 +151,7 @@ Scaling is horizontal and trivial.
 
 ---
 
-## 7. Complexity Summary
+## Complexity Summary
 
 | Operation       | Complexity | Notes |
 |-----------------|------------|-------|
@@ -166,7 +166,7 @@ This is the foundation of the engine’s ultra-low latency.
 
 ---
 
-## 8. Why This Architecture Matters
+## Why This Architecture Matters
 The FlashStrike OrderBook mirrors the architectural principles found in:
 - NASDAQ INET  
 - Kraken’s X-Engine  
@@ -184,7 +184,7 @@ Exactly what a high-performance matching engine needs.
 
 ---
 
-## 9. Summary
+## Summary
 FlashStrike’s OrderBook is designed for the exact requirements of a professional, low-latency exchange:
 
 - preallocated memory  
@@ -194,3 +194,22 @@ FlashStrike’s OrderBook is designed for the exact requirements of a profession
 - deterministic performance  
 
 Combined with the `Manager` and the lock-free trade event pipeline, it forms the backbone of a modern, scalable matching engine.
+
+---
+ 
+## Related components
+
+[`matching_engine::Manager`](./manager.md)
+[`matching_engine::OrderIdMap`](./order_id_map.md)
+[`matching_engine::OrderPool`](./order_pool.md)
+[`matching_engine::PartitionPool`](./partitions.md)
+[`matching_engine::PriceLevelStore`](./price_level_store.md)
+[`matching_engine::Telemetry`](./telemetry.md)
+
+[`matching_engine::conf::Instrument`](./conf/instrument.md)
+[`matching_engine::conf::NormalizedInstrument`](./conf/normalized_instrument.md)
+[`matching_engine::conf::PartitionPlan`](./conf/partition_plan.md)
+
+---
+
+👉 Back to [`FlashStrike Matching Engine — Overview`](../matching_engine_overview.md)

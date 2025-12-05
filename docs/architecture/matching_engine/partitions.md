@@ -1,6 +1,6 @@
 # FlashStrike Partition Architecture — Design Overview
 
-## 1. Purpose
+## Purpose
 The **Partition** and **PartitionPool** subsystems form the foundation of FlashStrike’s
 ultra-low-latency matching engine.  
 They provide **deterministic memory layout**, **constant-time price-to-level mapping**,  
@@ -14,7 +14,7 @@ This document summarizes the architecture and design philosophy of:
 
 ---
 
-## 2. Architectural Role
+## Architectural Role
 
 FlashStrike decomposes the price space into fixed-size **partitions**:
 
@@ -36,7 +36,7 @@ The partition system provides the structural backbone for:
 
 ---
 
-## 3. PriceLevel — Intrusive FIFO Queue per Price
+## PriceLevel — Intrusive FIFO Queue per Price
 
 A `PriceLevel` groups all orders resting at the same price.
 
@@ -56,7 +56,7 @@ Each `PriceLevel` is extremely compact and optimized for CPU cache locality.
 
 ---
 
-## 4. Partition — Fixed-Range Container of PriceLevels
+## Partition — Fixed-Range Container of PriceLevels
 
 A `Partition` contains a fixed number of `PriceLevel` objects, representing
 a contiguous block of prices:
@@ -85,7 +85,7 @@ This drastically reduces tail latency.
 
 ---
 
-## 5. Partition Active-Bitmap
+## Partition Active-Bitmap
 
 Each Partition tracks which offset-levels are active:
 
@@ -104,7 +104,7 @@ multi-layered indexing system optimized for high-frequency matching.
 
 ---
 
-## 6. PartitionPool — Preallocated Memory Manager
+## PartitionPool — Preallocated Memory Manager
 
 The `PartitionPool` is a lightweight allocator for Partitions.
 
@@ -128,7 +128,7 @@ It:
 
 ---
 
-## 7. Lifecycle
+## Lifecycle
 
 ### Allocation:
 ```
@@ -150,7 +150,7 @@ partition_pool.release(p);
 
 ---
 
-## 8. Complexity Summary
+## Complexity Summary
 
 | Operation                | Complexity | Notes |
 |--------------------------|------------|-------|
@@ -162,7 +162,7 @@ partition_pool.release(p);
 
 ---
 
-## 9. Why This Architecture Matters
+## Why This Architecture Matters
 
 The FlashStrike partition architecture mirrors the structure used in
 modern exchange engines and FPGA-backed order books:
@@ -183,7 +183,7 @@ This architecture allows FlashStrike to behave like a production-grade exchange 
 
 ---
 
-## 10. Summary
+## Summary
 
 FlashStrike’s partition-based architecture enables:
 - O(1) price lookup
@@ -194,3 +194,22 @@ FlashStrike’s partition-based architecture enables:
 
 Together with OrderPool, OrderIdMap, and PriceLevelStore,
 the partition subsystem forms a critical piece of the engine's performance profile.
+
+---
+ 
+## Related components
+
+[`matching_engine::Manager`](./manager.md)
+[`matching_engine::OrderBook`](./order_book.md)
+[`matching_engine::OrderIdMap`](./order_id_map.md)
+[`matching_engine::OrderPool`](./order_pool.md)
+[`matching_engine::PriceLevelStore`](./price_level_store.md)
+[`matching_engine::Telemetry`](./telemetry.md)
+
+[`matching_engine::conf::Instrument`](./conf/instrument.md)
+[`matching_engine::conf::NormalizedInstrument`](./conf/normalized_instrument.md)
+[`matching_engine::conf::PartitionPlan`](./conf/partition_plan.md)
+
+---
+
+👉 Back to [`FlashStrike Matching Engine — Overview`](../matching_engine_overview.md)

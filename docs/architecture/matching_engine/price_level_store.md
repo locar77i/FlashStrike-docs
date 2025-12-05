@@ -1,6 +1,6 @@
 # FlashStrike PriceLevelStore — Architecture Overview
 
-## 1. Purpose
+## Purpose
 The `PriceLevelStore` is the core low‑level data structure that powers the FlashStrike matching engine’s **ultra‑low‑latency, O(1) price access**.  
 It organizes all price levels using a **partitioned, bitmap‑indexed layout** with strict price‑time ordering and predictable memory access patterns.
 
@@ -8,7 +8,7 @@ This component is designed to mirror the performance characteristics of modern e
 
 ---
 
-## 2. High-Level Design
+## High-Level Design
 
 Each `PriceLevelStore` manages one side of the book:
 
@@ -32,7 +32,7 @@ price → partition_id → price_level_offset
 
 ---
 
-## 3. Partitioned Price Space
+## Partitioned Price Space
 
 Prices are divided into **fixed‑size partitions**, determined by:
 
@@ -59,7 +59,7 @@ All hot data for a matching cycle stays within a small, cache‑friendly region.
 
 ---
 
-## 4. Active Partition Bitmap
+## Active Partition Bitmap
 
 The store maintains a bitmap:
 
@@ -85,7 +85,7 @@ This technique is used in high‑performance matchers where tail latency matters
 
 ---
 
-## 5. Global Best‑Price Tracking
+## Global Best‑Price Tracking
 
 The store caches the global best price:
 
@@ -106,7 +106,7 @@ This approach reduces tail latency by avoiding full recomputation on every mutat
 
 ---
 
-## 6. FlashStrike Optimized Repricing
+## FlashStrike Optimized Repricing
 
 A key innovation in this engine is:
 
@@ -131,7 +131,7 @@ This dramatically reduces tail spikes during bursts of repricing traffic.
 
 ---
 
-## 7. PriceLevel Internals
+## PriceLevel Internals
 
 Each price level contains:
 - head/tail order indices  
@@ -148,7 +148,7 @@ Each price level contains:
 
 ---
 
-## 8. Remove and Insert Logic
+## Remove and Insert Logic
 
 Insert:
 ```
@@ -173,7 +173,7 @@ recompute global best if needed
 
 ---
 
-## 9. Complexity Summary
+## Complexity Summary
 
 | Operation                | Complexity | Notes |
 |--------------------------|------------|-------|
@@ -186,7 +186,7 @@ recompute global best if needed
 
 ---
 
-## 10. Performance Characteristics
+## Performance Characteristics
 
 ### ✔ Zero dynamic allocation  
 Partitions and levels are preallocated in a pool.
@@ -205,7 +205,7 @@ FlashStrike optimization + bitmap recompute minimize worst‑case spikes.
 
 ---
 
-## 11. Why This Architecture Matters
+## Why This Architecture Matters
 
 This design mirrors the architectural principles of real exchange engines:
 
@@ -224,7 +224,7 @@ It delivers:
 
 ---
 
-## 12. Summary
+## Summary
 
 The FlashStrike `PriceLevelStore` is a high‑performance, feature‑rich subsystem engineered for exchange‑grade workloads.  
 Its unique characteristics:
@@ -237,3 +237,21 @@ Its unique characteristics:
 
 make it one of the most advanced components of the FlashStrike matching engine.
 
+---
+ 
+## Related components
+
+[`matching_engine::Manager`](./manager.md)
+[`matching_engine::OrderBook`](./order_book.md)
+[`matching_engine::OrderIdMap`](./order_id_map.md)
+[`matching_engine::OrderPool`](./order_pool.md)
+[`matching_engine::PartitionPool`](./partitions.md)
+[`matching_engine::Telemetry`](./telemetry.md)
+
+[`matching_engine::conf::Instrument`](./conf/instrument.md)
+[`matching_engine::conf::NormalizedInstrument`](./conf/normalized_instrument.md)
+[`matching_engine::conf::PartitionPlan`](./conf/partition_plan.md)
+
+---
+
+👉 Back to [`FlashStrike Matching Engine — Overview`](../matching_engine_overview.md)

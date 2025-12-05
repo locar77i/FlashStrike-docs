@@ -1,6 +1,6 @@
 # FlashStrike OrderPool — Architecture Overview
 
-## 1. Purpose
+## Purpose
 The `OrderPool` is the FlashStrike matching engine’s **high-performance, preallocated memory subsystem**
 responsible for storing all active orders. It is designed for:
 - **Zero heap usage in the hot path**
@@ -12,7 +12,7 @@ This architecture is standard in real matching engines, HFT systems, FPGA engine
 
 ---
 
-## 2. High-Level Design
+## High-Level Design
 
 The OrderPool is a **fixed-size contiguous array** of `Order` objects:
 
@@ -34,7 +34,7 @@ State transitions occur via an intrusive free list.
 
 ---
 
-## 3. Intrusive Free List
+## Intrusive Free List
 
 Each `Order` contains:
 ```
@@ -57,7 +57,7 @@ This is the ideal strategy for HFT workloads.
 
 ---
 
-## 4. Order Structure Layout
+## Order Structure Layout
 
 Each `Order` stores:
 - `prev_idx`, `next_idx` (intrusive list for FIFO price levels)
@@ -77,7 +77,7 @@ No wrapper objects. No pointers. No allocation overhead.
 
 ---
 
-## 5. Key Operations
+## Key Operations
 
 ### Allocate (`allocate()`)
 ```
@@ -101,7 +101,7 @@ Direct array indexing — no hashing, no tree traversal.
 
 ---
 
-## 6. Deterministic Performance
+## Deterministic Performance
 
 ### ✔ No malloc/free  
 This eliminates:
@@ -117,7 +117,7 @@ Large pools behave identically to small ones due to stable complexity.
 
 ---
 
-## 7. Debug Mode (Optional)
+## Debug Mode (Optional)
 
 When `DEBUG` is enabled:
 - Double-allocate detection  
@@ -132,7 +132,7 @@ This mirrors the design philosophy of professional engines.
 
 ---
 
-## 8. Metrics & Telemetry
+## Metrics & Telemetry
 
 OrderPool integrates with the metrics layer:
 
@@ -148,7 +148,7 @@ This supports:
 
 ---
 
-## 9. Memory Footprint
+## Memory Footprint
 
 The pool reports:
 - static bytes (OrderPool struct)
@@ -161,7 +161,7 @@ This is useful for:
 
 ---
 
-## 10. Why This Architecture Matters
+## Why This Architecture Matters
 
 OrderPool’s design matches the memory strategies used in:
 - major crypto exchanges  
@@ -179,7 +179,7 @@ A scalable matching engine must have an allocation subsystem like this.
 
 ---
 
-## 11. Summary
+## Summary
 
 FlashStrike’s `OrderPool` provides:
 - O(1) deterministic order allocation
@@ -190,3 +190,21 @@ FlashStrike’s `OrderPool` provides:
 
 This subsystem is foundational for achieving high throughput and low latency across the entire engine.
 
+---
+ 
+## Related components
+
+[`matching_engine::Manager`](./manager.md)
+[`matching_engine::OrderBook`](./order_book.md)
+[`matching_engine::OrderIdMap`](./order_id_map.md)
+[`matching_engine::PartitionPool`](./partitions.md)
+[`matching_engine::PriceLevelStore`](./price_level_store.md)
+[`matching_engine::Telemetry`](./telemetry.md)
+
+[`matching_engine::conf::Instrument`](./conf/instrument.md)
+[`matching_engine::conf::NormalizedInstrument`](./conf/normalized_instrument.md)
+[`matching_engine::conf::PartitionPlan`](./conf/partition_plan.md)
+
+---
+
+👉 Back to [`FlashStrike Matching Engine — Overview`](../matching_engine_overview.md)

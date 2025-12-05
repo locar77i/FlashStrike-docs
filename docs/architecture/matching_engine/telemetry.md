@@ -13,7 +13,7 @@ This document explains all telemetry components:
 
 ---
 
-# 1. Design Goals
+## Design Goals
 
 FlashStrike telemetry is built for:
 
@@ -49,7 +49,7 @@ This eliminates cross‑component coupling.
 
 ---
 
-# 2. Telemetry Root Struct
+## Telemetry Root Struct
 
 ```cpp
 struct Telemetry {
@@ -74,7 +74,7 @@ And passed as references to their respective updaters.
 
 ---
 
-# 3. `Init` — Construction‑Time Metrics
+## `Init` — Construction‑Time Metrics
 
 Records one‑shot metrics:
 
@@ -105,7 +105,7 @@ These metrics let you verify:
 
 ---
 
-# 4. `Manager` — High‑Level Matching Metrics
+## `Manager` — High‑Level Matching Metrics
 
 Tracks **order‑flow processing**, including:
 
@@ -134,7 +134,7 @@ This provides deep observability of the high‑level matching engine.
 
 ---
 
-# 5. `PriceLevelStore` Metrics
+## `PriceLevelStore` Metrics
 
 Collected separately for:
 
@@ -162,7 +162,7 @@ This enables precise profiling of order‑book topology dynamics.
 
 ---
 
-# 6. `LowLevel` — Core Data‑Structure Metrics
+## `LowLevel` — Core Data‑Structure Metrics
 
 Used by:
 - `OrderPool`
@@ -197,7 +197,7 @@ Gives visibility into potential performance degradation as the book fills.
 
 ---
 
-# 7. Memory Layout Constraints
+## Memory Layout Constraints
 
 Every telemetry struct:
 
@@ -216,7 +216,7 @@ This makes counters safe to update concurrently from different hot paths.
 
 ---
 
-# 8. Metric Collection & Export
+## Metric Collection & Export
 
 Each telemetry struct implements:
 
@@ -244,7 +244,7 @@ event: modify_price
 
 ---
 
-# 9. Dumping (Human‑Readable)
+## Dumping (Human‑Readable)
 
 Each struct implements a `dump()` method to print:
 
@@ -265,7 +265,7 @@ Example:
 
 ---
 
-# 10. Integration in the Matching Engine
+## Integration in the Matching Engine
 
 Telemetry is wired through constructor injection:
 
@@ -284,7 +284,7 @@ Each subsystem receives references to the metrics it is responsible for.
 
 ---
 
-# 11. Why This Telemetry System Is HFT‑Grade
+## Why This Telemetry System Is HFT‑Grade
 
 ### ✔ Zero heap allocation  
 ### ✔ Const‑time counters, no locks  
@@ -294,3 +294,21 @@ Each subsystem receives references to the metrics it is responsible for.
 ### ✔ Minimal hot‑path code branches  
 ### ✔ Scales linearly with number of instruments  
 
+---
+ 
+## Related components
+
+[`matching_engine::Manager`](./manager.md)
+[`matching_engine::OrderBook`](./order_book.md)
+[`matching_engine::OrderIdMap`](./order_id_map.md)
+[`matching_engine::OrderPool`](./order_pool.md)
+[`matching_engine::PartitionPool`](./partitions.md)
+[`matching_engine::PriceLevelStore`](./price_level_store.md)
+
+[`matching_engine::conf::Instrument`](./conf/instrument.md)
+[`matching_engine::conf::NormalizedInstrument`](./conf/normalized_instrument.md)
+[`matching_engine::conf::PartitionPlan`](./conf/partition_plan.md)
+
+---
+
+👉 Back to [`FlashStrike Matching Engine — Overview`](../matching_engine_overview.md)
