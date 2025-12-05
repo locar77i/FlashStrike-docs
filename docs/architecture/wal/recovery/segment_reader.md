@@ -125,7 +125,7 @@ void build_index() noexcept;
 
 ---
 
-## Seek Algorithm (Accurate Description)
+## Seek Algorithm
 
 FlashStrike uses a **hybrid algorithm**, optimized for WAL properties:
 

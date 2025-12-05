@@ -116,5 +116,15 @@ latency—critical for diagnosing stalls, ensuring write‑ahead logging continu
 and meeting ultra‑low‑latency exchange engine requirements.
 
 ---
+
+## Related components
+
+[`recorder::MetaStore`](../meta.md)
+[`recorder::Manager`](../manager.md)
+[`recorder::SegmentWriter`](../segment_writer.md)
+
+[`recorder::worker::SegmentMaintainer`](./segment_maintainer.md)
+
+---
  
 👉 Back to [`Telemetry – WAL Recorder Metrics Aggregator`](../telemetry.md)

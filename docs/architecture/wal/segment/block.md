@@ -25,7 +25,7 @@ Because the block is trivially copyable and cache-aligned, it can be written and
 
 ---
 
-# 1. Block Structure
+## Block Structure
 
 ```cpp
 struct alignas(64) Block {
@@ -45,7 +45,7 @@ struct alignas(64) Block {
 
 ---
 
-# 2. Purpose of a Block
+## Purpose of a Block
 
 A WAL block stores a contiguous batch of events. Together with its header, it provides:
 
@@ -72,7 +72,7 @@ offset = sizeof(Header) + block_index * sizeof(Block)
 
 ---
 
-# 3. Reset Operations
+## Reset Operations
 
 ### `reset()`
 Clears the entire block, including events and header fields.
@@ -83,13 +83,13 @@ Clears only padding inside the header and events.
 
 ---
 
-# 4. Checksum System
+## Checksum System
 
 WAL blocks implement **two distinct checksum types**:
 
 ---
 
-## 4.1 Local checksum  
+### 1. Local checksum  
 Validates the event payload only.
 
 ```cpp
@@ -106,7 +106,7 @@ It **does not** depend on any previous block.
 
 ---
 
-## 4.2 Chained checksum  
+### 2. Chained checksum  
 Creates a forward‑chained integrity link:
 
 ```cpp
@@ -125,7 +125,7 @@ This is the WAL equivalent of a **hash chain** or forward‑secure log.
 
 ---
 
-# 5. Block Finalization
+## Block Finalization
 
 Before persisting the block, the engine calls:
 
@@ -143,7 +143,7 @@ After finalization, the block is ready to be written to disk.
 
 ---
 
-# 6. Structural Validation
+## Structural Validation
 
 `validate_data()` performs:
 
@@ -168,7 +168,7 @@ Any violation implies WAL corruption or an incomplete write.
 
 ---
 
-# 7. Checksum Validation
+## Checksum Validation
 
 `validate_checksums(prev_chain)`:
 
@@ -185,7 +185,7 @@ Possible error results:
 
 ---
 
-# 8. Full Verification
+## Full Verification
 
 `verify(prev_chained)` performs both:
 
@@ -203,7 +203,7 @@ This function is used during WAL replay.
 
 ---
 
-# 9. Serialization
+## Serialization
 
 Because the block is trivial and standard‑layout, persistence uses:
 
@@ -220,7 +220,7 @@ Both rely on raw `memcpy()`, providing:
 
 ---
 
-# 10. Size Helpers
+## Size Helpers
 
 ```cpp
 static constexpr size_t byte_size()
@@ -236,7 +236,7 @@ Used when preallocating segments and scanning WAL files.
 
 ---
 
-# 11. Compile‑Time Guarantees
+## Compile‑Time Guarantees
 
 Static assertions ensure:
 
@@ -249,7 +249,7 @@ These eliminate the risk of ABI drift, which would break WAL compatibility.
 
 ---
 
-# 12. Example Usage
+## Example Usage
 
 ### Writing:
 
@@ -280,7 +280,7 @@ if (s != Status::OK) {
 
 ---
 
-# 13. Summary
+## Summary
 
 The WAL Block is a **high‑integrity, high‑performance persistence structure** supporting:
 

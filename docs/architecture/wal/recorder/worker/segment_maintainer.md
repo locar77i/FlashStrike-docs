@@ -12,7 +12,7 @@ It ensures the main matching engine and WAL writer maintain ultra-low-latency pe
 
 ---
 
-## 1. Purpose
+## Purpose
 High-frequency trading engines generate massive event streams requiring safe, sequential persistence. However, filesystem operations such as:
 
 - `fdatasync`
@@ -27,9 +27,9 @@ can all introduce **millisecond-level stalls**.
 
 ---
 
-## 2. Responsibilities
+## Responsibilities
 
-### **✔ Persist completed WAL segments**
+### ✔ Persist completed WAL segments
 Processes segments from:
 
 ```
@@ -43,7 +43,7 @@ For each segment:
 
 ---
 
-### **✔ Compress old hot segments**
+### ✔ Compress old hot segments
 When notified through:
 
 ```
@@ -58,7 +58,7 @@ The maintainer:
 
 ---
 
-### **✔ Delete oldest compressed segments**
+### ✔ Delete oldest compressed segments
 When exceeding cold retention limits, it removes `.lz4` files through:
 
 ```
@@ -67,7 +67,7 @@ segments_to_free_ : spmc_task_ring<std::string>
 
 ---
 
-### **✔ Maintain hot & cold retention**
+### ✔ Maintain hot & cold retention
 - Hot = uncompressed `.wal`  
 - Cold = compressed `.lz4`
 
@@ -79,7 +79,7 @@ These values are clamped to system-wide limits defined in `wal/constants.hpp`.
 
 ---
 
-## 3. Segment Lifecycle
+## Segment Lifecycle
 
 ```
 ┌─────────────┐
@@ -105,9 +105,9 @@ Lifecycle states:
 
 ---
 
-## 4. Threading Model
+## Threading Model
 
-### **Dedicated background thread**
+### Dedicated background thread
 Started with:
 
 ```cpp
@@ -120,12 +120,12 @@ Stops gracefully with:
 maintainer.stop();
 ```
 
-### **Safe interactions**
+### Safe interactions
 - The maintainer thread pops tasks from ring buffers  
 - WAL writer pushes tasks into those buffers  
 - Consumer interactions are thread-safe by design  
 
-### **Exponential backoff**
+### Exponential backoff
 To avoid busy spinning when idle:
 
 ```
@@ -134,7 +134,7 @@ sleep_time = min_sleep ... max_sleep
 
 ---
 
-## 5. Persistence Loop Logic
+## Persistence Loop Logic
 
 Pseudo-code for `persistence_loop_()`:
 
@@ -163,15 +163,15 @@ Idle loop efficiency is achieved via exponential backoff.
 
 ---
 
-## 6. Compression Details
+## Compression Details
 
 The maintainer supports:
 
-### **LZ4 Block Compression**
+### LZ4 Block Compression
 Fast but lacks metadata.  
 Used for extremely compact storage.
 
-### **LZ4 Frame Compression (recommended)**
+### LZ4 Frame Compression (recommended)
 - Provides container framing
 - Checksums and proper block management
 - Compatible with external LZ4 tools
@@ -180,7 +180,7 @@ Compression uses streaming 1 MiB chunks to avoid memory spikes.
 
 ---
 
-## 7. Safety & Data Integrity
+## Safety & Data Integrity
 
 Before compression, the maintainer:
 
@@ -194,7 +194,7 @@ During shutdown:
 
 ---
 
-## 8. Telemetry Integration
+## Telemetry Integration
 
 If `ENABLE_FS1_METRICS` is enabled, the maintainer records:
 
@@ -208,7 +208,7 @@ This is essential for diagnosing WAL I/O bottlenecks.
 
 ---
 
-## 9. API Summary
+## API Summary
 
 ```cpp
 SegmentMaintainer(
@@ -233,23 +233,13 @@ Everything else is handled internally.
 
 ---
 
-## 10. Invariants
+## Invariants
 
 - Hot segments ≤ `max_segments_`
 - Cold segments ≤ `max_compressed_segments_`
 - WAL files must be non-empty
 - All segments eventually persisted, compressed, or deleted
 - Maintainer thread always drains all queues on shutdown
-
----
-
-## 11. Related Documentation
-
-- `wal_segment_writer.md` — hot-path segment writing  
-- `wal_segment_preparer.md` — preallocates new segments  
-- `wal_segment_header.md` — on-disk WAL header format  
-- `wal_segment_block.md` — WAL block structure  
-- `wal_segment_overview.md` — global architecture  
 
 ---
 

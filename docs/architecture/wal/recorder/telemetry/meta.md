@@ -77,5 +77,15 @@ The **MetaStore telemetry module** provides:
 This component is a foundational layer of the WAL recorder’s observability and performance diagnostics.
 
 ---
+
+## Related components
+
+[`recorder::Manager`](./manager.md)
+[`recorder::SegmentWriter`](./segment_writer.md)
+
+[`recorder::worker::SegmentPreparer`](./worker/segment_preparer.md)
+[`recorder::worker::SegmentMaintainer`](./worker/segment_maintainer.md)
+
+---
  
 👉 Back to [`Telemetry – WAL Recorder Metrics Aggregator`](../telemetry.md)

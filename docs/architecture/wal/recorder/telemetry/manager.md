@@ -111,5 +111,15 @@ The header enforces:
 This eliminates cross‑thread contention in high‑frequency metrics updates.
 
 ---
+
+## Related components
+
+[`recorder::MetaStore`](./meta.md)
+[`recorder::SegmentWriter`](./segment_writer.md)
+
+[`recorder::worker::SegmentPreparer`](./worker/segment_preparer.md)
+[`recorder::worker::SegmentMaintainer`](./worker/segment_maintainer.md)
+
+---
  
 👉 Back to [`Telemetry – WAL Recorder Metrics Aggregator`](../telemetry.md)

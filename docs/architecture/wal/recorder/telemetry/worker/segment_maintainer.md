@@ -96,5 +96,15 @@ This telemetry module is essential for diagnosing WAL durability, retention effi
 It is designed for HFT-grade workloads: predictable, lock-free, and introspectable.
 
 ---
+
+## Related components
+
+[`recorder::MetaStore`](../meta.md)
+[`recorder::Manager`](../manager.md)
+[`recorder::SegmentWriter`](../segment_writer.md)
+
+[`recorder::worker::SegmentPreparer`](./segment_preparer.md)
+
+---
  
 👉 Back to [`Telemetry – WAL Recorder Metrics Aggregator`](../telemetry.md)

@@ -26,7 +26,7 @@ It is also **POD**, **trivially copyable**, and **safe for raw I/O operations**.
 
 ---
 
-# 1. Binary Layout Summary
+## Binary Layout Summary
 
 | Offset | Size | Field | Description |
 |--------|------|--------|-------------|
@@ -43,7 +43,7 @@ It is also **POD**, **trivially copyable**, and **safe for raw I/O operations**.
 
 ---
 
-# 2. Responsibilities
+## Responsibilities
 
 The BlockHeader encapsulates:
 
@@ -72,7 +72,7 @@ Ensures logical consistency before replaying a block.
 
 ---
 
-# 3. Endian-Safe Accessors
+## Endian-Safe Accessors
 
 All getters convert from little-endian values.  
 All setters convert values to little-endian.
@@ -89,7 +89,7 @@ uint32_t block_index() const noexcept;
 
 ---
 
-# 4. Reset Operations
+## Reset Operations
 
 ### `reset()`
 Clears all fields to zero.
@@ -99,7 +99,7 @@ Clears the padding region (`pad_[]`), ensuring no uninitialized bytes are writte
 
 ---
 
-# 5. Header Checksum System
+## Header Checksum System
 
 Each header includes a dedicated checksum computed via:
 
@@ -125,7 +125,7 @@ Returns `true` if the checksum matches the expected value.
 
 ---
 
-# 6. Finalization
+## Finalization
 
 Before writing a WAL block, the engine calls:
 
@@ -143,7 +143,7 @@ After finalization, the header is ready for durable WAL persistence.
 
 ---
 
-# 7. Structural Validation
+## Structural Validation
 
 `validate_data()` ensures:
 
@@ -168,7 +168,7 @@ Any violation indicates structural corruption.
 
 ---
 
-# 8. Compile-Time ABI Guarantees
+## Compile-Time ABI Guarantees
 
 The implementation uses strict static assertions:
 
@@ -181,9 +181,9 @@ These safeguards protect the WAL format against unintended binary layout drift.
 
 ---
 
-# 9. Example Usage
+## Example Usage
 
-## During WAL writing:
+### During WAL writing:
 
 ```cpp
 BlockHeader hdr;
@@ -194,7 +194,7 @@ hdr.set_event_count(n);
 hdr.finalize(block_idx, block_checksum, chained_checksum);
 ```
 
-## During WAL replay:
+### During WAL replay:
 
 ```cpp
 if (!hdr.validate_data()) {
@@ -208,7 +208,7 @@ if (!hdr.validate_checksum()) {
 
 ---
 
-# 10. Summary
+## Summary
 
 The `BlockHeader` is a **critical metadata structure** that ensures:
 

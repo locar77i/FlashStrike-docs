@@ -165,5 +165,15 @@ static_assert(std::is_trivially_copyable_v<SegmentWriter>);
 It forms a critical part of FlashStrike's **WAL durability, observability, and debugging ecosystem**.
 
 ---
+
+## Related components
+
+[`recorder::MetaStore`](./meta.md)
+[`recorder::Manager`](./manager.md)
+
+[`recorder::worker::SegmentPreparer`](./worker/segment_preparer.md)
+[`recorder::worker::SegmentMaintainer`](./worker/segment_maintainer.md)
+
+---
  
 👉 Back to [`Telemetry – WAL Recorder Metrics Aggregator`](../telemetry.md)

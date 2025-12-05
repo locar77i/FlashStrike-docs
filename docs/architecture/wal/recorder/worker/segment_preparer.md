@@ -13,14 +13,14 @@ This document summarizes architecture, threading model, invariants, and interact
 
 ---
 
-## 1. Purpose
+## Purpose
 High-frequency trading workloads require **zero-stall persistence**. Any filesystem operation—file creation, mmap, ftruncate, page fault—can introduce latency spikes of **tens to hundreds of microseconds**.
 
 `SegmentPreparer` moves this work **off the critical path** by preparing future WAL segments asynchronously.
 
 ---
 
-## 2. Responsibilities
+## Responsibilities
 - Maintain a queue of preallocated WAL segments  
 - Create new segment files in a background thread  
 - Memory-map segment files  
@@ -32,7 +32,7 @@ High-frequency trading workloads require **zero-stall persistence**. Any filesys
 
 ---
 
-## 3. Queueing & Backpressure
+## Queueing & Backpressure
 Uses a lockfree SPSC ring buffer:
 
 ```
@@ -53,7 +53,7 @@ When queue is empty:
 
 ---
 
-## 4. Threading Model
+## Threading Model
 
 ### Background Worker Thread
 Started via:
@@ -80,7 +80,7 @@ auto seg = preparer.get_next_segment();
 
 ---
 
-## 5. Segment Preparation Lifecycle
+## Segment Preparation Lifecycle
 Inside the worker loop:
 
 1. Generate a unique WAL filename  
@@ -94,7 +94,7 @@ Segments retrieved via `get_next_segment()` are **ready for immediate event appe
 
 ---
 
-## 6. Interaction With SegmentWriter
+## Interaction With SegmentWriter
 A prepared segment includes:
 - Preallocated file (ftruncate)  
 - Memory mapped pages (mmap)  
@@ -106,7 +106,7 @@ This completely eliminates file I/O latency from the hot path.
 
 ---
 
-## 7. Shutdown Behavior
+## Shutdown Behavior
 When `stop()` is called:
 
 - Background thread exits  
@@ -117,7 +117,7 @@ When `stop()` is called:
 
 ---
 
-## 8. Metrics Integration
+## Metrics Integration
 `SegmentPreparer` integrates with telemetry:
 
 - Time to create segments  
@@ -128,7 +128,7 @@ This helps profile WAL performance under production load.
 
 ---
 
-## 9. API Summary
+## API Summary
 
 ```cpp
 SegmentPreparer(const std::string& dir,
@@ -144,7 +144,7 @@ std::shared_ptr<SegmentWriter> get_next_segment();
 
 ---
 
-## 10. Invariants
+## Invariants
 - Queue size never exceeds `PREPARE_QUEUE_CAPACITY`  
 - Each prepared segment has a unique index  
 - All returned segments are ready for immediate append  
@@ -161,15 +161,6 @@ std::shared_ptr<SegmentWriter> get_next_segment();
 
 [`recorder::worker::MetaCoordinator`](./meta_coordinator.md)
 [`recorder::worker::SegmentMaintainer`](./segment_maintainer.md)
-
----
-
-## 11. Related Documentation
-- `wal_segment_header.md`  
-- `wal_segment_block.md`  
-- `wal_segment_block_header.md`  
-- `wal_segment_writer.md`  
-- `wal_segment_overview.md`
 
 ---
 

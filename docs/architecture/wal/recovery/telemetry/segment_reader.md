@@ -80,7 +80,7 @@ If verification fails, telemetry increments the correct counter:
 
 ---
 
-## Dump Output (Human‑Readable Example)
+## Dump Output (Example)
 
 ```
 [Segment Reader Metrics] Snapshot:

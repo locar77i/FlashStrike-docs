@@ -28,7 +28,7 @@ This struct is:
 
 ---
 
-# 1. Layout Summary
+## Layout Summary
 
 | Offset | Size | Field | Description |
 |-------|------|--------|-------------|
@@ -49,7 +49,7 @@ This struct is:
 
 ---
 
-# 2. Responsibilities
+## Responsibilities
 
 The WAL header ensures:
 
@@ -77,7 +77,7 @@ At 64 bytes, the header fits in a single cache line and can be written atomicall
 
 ---
 
-# 3. Accessors (Endian-safe)
+## Accessors (Endian-safe)
 
 All getters convert from little-endian:
 
@@ -97,7 +97,7 @@ This allows:
 
 ---
 
-# 4. Checksum System
+## Checksum System
 
 The header includes a **64-bit XXH64 checksum**, computed via:
 
@@ -126,7 +126,7 @@ Returns:
 
 ---
 
-# 5. Structural Validation
+## Structural Validation
 
 `validate_data()` checks:
 
@@ -145,7 +145,7 @@ Final result is one of the durable `Status` codes.
 
 ---
 
-# 6. Lifecycle Operations
+## Lifecycle Operations
 
 ### `reset()`  
 Clears all fields to zero.
@@ -168,7 +168,7 @@ Perform raw 64-byte memcpy operations.
 
 ---
 
-# 7. Segment Sizing
+## Segment Sizing
 
 `segment_size()` returns the total size implied by:
 
@@ -180,7 +180,7 @@ Used during replay and log scanning.
 
 ---
 
-# 8. Compile-Time Guarantees
+## Compile-Time Guarantees
 
 Static assertions ensure:
 
@@ -193,7 +193,7 @@ These prevent silent ABI drift—which could corrupt WAL persistence.
 
 ---
 
-# 9. Example Usage
+## Example Usage
 
 ```cpp
 Header hdr;
@@ -209,7 +209,7 @@ hdr.finalize(previous_segment_checksum);
 
 ---
 
-# 10. Summary
+## Summary
 
 The WAL `Header` struct is:
 

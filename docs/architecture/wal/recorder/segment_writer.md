@@ -24,7 +24,7 @@ It is optimized for **ultra-low-latency append operations** in a single-producer
 
 ---
 
-## 1. WAL Segment Structure (Recap)
+## WAL Segment Structure (Recap)
 
 A WAL segment file contains:
 
@@ -47,7 +47,7 @@ The writer appends events into in-memory blocks, finalizes them, and stores them
 
 ---
 
-## 2. Responsibilities of SegmentWriter
+## Responsibilities of SegmentWriter
 
 ### ✔ Open and initialize a WAL segment  
 - Create new segment (`open_new_segment()`), preventing accidental overwrites  
@@ -109,7 +109,7 @@ Ensures **crash-consistent persistence**.
 
 ---
 
-## 3. Integrity Guarantees
+## Integrity Guarantees
 
 ### ✔ Self-contained segment metadata  
 SegmentWriter ensures:
@@ -136,7 +136,7 @@ These make the WAL resistant to:
 
 ---
 
-## 4. Thread-Safety Model
+## Thread-Safety Model
 
 SegmentWriter is **not thread-safe** by design.
 
@@ -150,7 +150,7 @@ This eliminates the need for locks on the hot path.
 
 ---
 
-## 5. Memory-Mapped I/O Design
+## Memory-Mapped I/O Design
 
 SegmentWriter uses `mmap` to write events:
 
@@ -168,7 +168,7 @@ flush(false);  // async msync
 
 ---
 
-## 6. Block Finalization Logic
+## Block Finalization Logic
 
 Before a block is written:
 
@@ -190,7 +190,7 @@ After writing:
 
 ---
 
-## 7. Restoring Existing Segments
+## Restoring Existing Segments
 
 When reopening a WAL for append:
 
@@ -213,7 +213,7 @@ This allows **resume-on-crash** semantics.
 
 ---
 
-## 8. Automatic Cleanup Logic
+## Automatic Cleanup Logic
 
 In the destructor, the writer will:
 
@@ -228,7 +228,7 @@ The system therefore never leaves behind:
 
 ---
 
-## 9. Invariants Enforced
+## Invariants Enforced
 
 - `segment_size = header + N * block_size`  
 - monotonic block indices  
@@ -245,7 +245,7 @@ These invariants make the WAL:
 
 ---
 
-## 10. Typical Usage Flow
+## Typical Usage Flow
 
 ### Creating a new segment
 
@@ -271,7 +271,7 @@ writer.open_existing_segment();
 
 ---
 
-## 11. Summary
+## Summary
 
 `SegmentWriter` is the **persistence backbone** of FlashStrike’s Write-Ahead Log system.
 

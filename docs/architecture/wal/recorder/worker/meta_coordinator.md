@@ -117,24 +117,24 @@ This minimizes latency and avoids contention.
 
 ## Lifecycle
 
-### **Initialization**
+### Initialization
 ```cpp
 MetaCoordinator meta(dir, "wal.meta", metrics);
 meta.load();
 meta.start();
 ```
 
-### **Hot‑Path Update**
+### Hot‑Path Update
 ```cpp
 meta.update(state);
 ```
 
-### **Read Metadata**
+### Read Metadata
 ```cpp
 MetaState s = meta.get_state();
 ```
 
-### **Shutdown**
+### Shutdown
 ```cpp
 meta.stop();
 ```
