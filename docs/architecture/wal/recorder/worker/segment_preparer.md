@@ -173,4 +173,4 @@ std::shared_ptr<SegmentWriter> get_next_segment();
 
 ---
 
-👉 Back to [`WAL Recorder System — Overview`](../recorder_overview.md)
+👉 Back to [`WAL Recorder System — Overview`](../../recorder_overview.md)

@@ -265,4 +265,4 @@ Everything else is handled internally.
 
 ---
 
-👉 Back to [`WAL Recorder System — Overview`](../recorder_overview.md)
+👉 Back to [`WAL Recorder System — Overview`](../../recorder_overview.md)
